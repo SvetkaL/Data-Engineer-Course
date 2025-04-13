@@ -1,0 +1,43 @@
+-- Database: first
+
+-- DROP DATABASE IF EXISTS first;
+
+CREATE DATABASE first
+    WITH
+    OWNER = test
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'en_US.utf8'
+    LC_CTYPE = 'en_US.utf8'
+    LOCALE_PROVIDER = 'libc'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+CREATE TABLE surnames (id SERIAL PRIMARY KEY, surname varchar(15));
+CREATE TABLE names (id SERIAL PRIMARY KEY, name varchar(15));
+CREATE TABLE patronymics (id SERIAL PRIMARY KEY, patronymic varchar(15));
+
+INSERT INTO surnames (surname)
+    VALUES ('Иванов'),
+           ('Петров'),
+           ('Сидоров');
+SELECT * FROM surnames;
+
+INSERT INTO names (name)
+    VALUES ('Иван'),
+           ('Петр'),
+           ('Сидор');
+SELECT * FROM names;
+
+INSERT INTO patronymics (patronymic)
+    VALUES ('Иванович'),
+           ('Петрович'),
+           ('Сидорович');
+SELECT * FROM patronymics;
+
+WITH cte as 
+    (SELECT CONCAT(surname || ' ' || name || ' ' || patronymic) as "Ф.И.О."
+     FROM surnames JOIN names USING(id)
+                   JOIN patronymics USING(id)
+    ORDER BY 1 DESC)
+select * from cte
